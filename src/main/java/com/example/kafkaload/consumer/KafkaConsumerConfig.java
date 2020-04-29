@@ -32,6 +32,15 @@ public class KafkaConsumerConfig {
         props.put(
                 ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
                 StringDeserializer.class);
+        props.put(
+                ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG,
+                ConsumerConfig.DEFAULT_MAX_PARTITION_FETCH_BYTES * 8);
+        props.put(
+                ConsumerConfig.FETCH_MAX_BYTES_CONFIG,
+                ConsumerConfig.DEFAULT_FETCH_MAX_BYTES * 4);
+        props.put(
+                ConsumerConfig.MAX_POLL_RECORDS_CONFIG,
+                2_000);
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
@@ -39,6 +48,7 @@ public class KafkaConsumerConfig {
     public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
+        factory.setConcurrency(100); // just number, in practice it will be partitions
         return factory;
     }
 }

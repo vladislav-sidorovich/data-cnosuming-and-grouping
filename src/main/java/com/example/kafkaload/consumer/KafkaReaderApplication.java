@@ -55,7 +55,6 @@ public class KafkaReaderApplication implements CommandLineRunner, ConsumerSeekAw
         startTime = clock.instant().getEpochSecond();
     }
 
-
     @Override
     public void run(String... args) throws Exception {
         logger.info("Reading Kafka data to container..");
@@ -70,7 +69,7 @@ public class KafkaReaderApplication implements CommandLineRunner, ConsumerSeekAw
     public void listen(ConsumerRecord<String, String> record) throws Exception {
         String value = record.value();
         counter.increment();
-        bytes.add(value.length() * 2);
+        bytes.add(value.getBytes().length);
 
         Notification notification = null;
         try {
